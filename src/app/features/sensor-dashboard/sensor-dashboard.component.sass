@@ -1,0 +1,83 @@
+$primary-text: #1f2937
+$accent-color: #2dd4bf
+$hover-color: #1e40af
+$shadow-light: rgba(0, 0, 0, 0.1)
+$shadow-hover: rgba(0, 0, 0, 0.15)
+$container-width: 1200px
+$border-radius: 8px
+$transition: all 0.2s ease
+
+.chart-grid
+  display: grid
+  grid-template-columns: repeat(3, 1fr)
+  gap: 1.5rem
+  padding: 1.5rem
+  max-width: $container-width
+  margin: 0 auto
+
+  .chart-item
+    width: 100%
+    height: 300px
+    background: #ffffff
+    border-radius: $border-radius
+    box-shadow: 0 2px 8px $shadow-light
+    padding: 1rem
+    transition: $transition
+
+    &:hover
+      transform: translateY(-4px)
+      box-shadow: 0 4px 12px $shadow-hover
+
+    h3
+      margin: 0 0 0.5rem
+      font-size: 1.125rem
+      font-weight: 600
+      color: $primary-text
+      text-align: center
+      transition: $transition
+
+      &:hover
+        color: $hover-color
+
+    canvas
+      width: 100% !important
+      height: 100% !important
+
+@media (max-width: 767px)
+  .chart-grid
+    grid-template-columns: 1fr
+    gap: 1rem
+    padding: 1rem
+
+  .chart-item
+    height: 250px
+    padding: 0.75rem
+
+    h3
+      font-size: 1rem
+
+@media (min-width: 768px) and (max-width: 1023px)
+  .chart-grid
+    grid-template-columns: repeat(2, 1fr)
+    gap: 1.25rem
+    padding: 1.25rem
+
+  .chart-item
+    height: 280px
+    padding: 0.875rem
+
+    h3
+      font-size: 1.125rem
+
+@media (min-width: 1024px)
+  .chart-grid
+    grid-template-columns: repeat(3, 1fr)
+    gap: 1.5rem
+    padding: 1.5rem
+
+  .chart-item
+    height: 300px
+    padding: 1rem
+
+    h3
+      font-size: 1.25rem
