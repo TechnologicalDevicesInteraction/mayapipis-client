@@ -1,0 +1,76 @@
+name: CI_PR_Workflow
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+  semantic_pull_request:
+    name: Check Conventional PR Title
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            chore
+            test
+            docs
+            build
+            ci
+            style
+            fix
+            hotfix
+            refactor
+            perf
+            revert
+          requireScope: false
+          subjectPattern: ^(?![A-Z]).+$
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            didn't match the configured pattern. Please ensure that the subject
+            doesn't start with an uppercase character.
+          headerPattern: '^(\w*)(?:\(([\w$.\-*/ ]*)\))?: (.*)$'
+          headerPatternCorrespondence: type, scope, subject
+          validateSingleCommit: true
+
+  check_commit_messages:
+    name: Check Conventional Commits Message
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: gsactions/commit-message-checker@v2
+        with:
+          pattern: '^(Merge|(?:feat|fix|chore|test|docs|build|ci|style|refactor|perf|revert|hotfix)(?:\(\w+\))?:\s[a-z]{1,2}.+)'
+          error: 'The commit message must have the following structure: <type>(?): <description>'
+          excludeDescription: 'true'
+          excludeTitle: 'true'
+          checkAllCommitMessages: 'true'
+          accessToken: ${{ secrets.GITHUB_TOKEN }}

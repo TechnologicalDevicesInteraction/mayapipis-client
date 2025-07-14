@@ -1,0 +1,20 @@
+name: CI_Branch_Workflow
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  check_branch_convention:
+    name: Check Conventional Branches Name
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: deepakputhraya/action-branch-name@master
+        with:
+          regex: '([a-z]+)\/([a-zA-Z_\-0-9]+)\/([a-zA-Z_-]+)'
+          allowed_prefixes: 'feature,bugfix,hotfix,build,ci,docs,chore,stable,refactor,perf,'
+          ignore: main,stage,develop
+          min_length: 4
+          max_length: 100
